@@ -4,6 +4,7 @@
 ####PRE-EXQUISITES USED IN THIS APP
 
 -node v12.18.3 or any version
+
 -electron v11.3.0 (optional? not sure if needed)
 
 ####INSTALLATION

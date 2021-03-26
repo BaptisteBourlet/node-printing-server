@@ -1,36 +1,39 @@
 const printer = require("pdf-to-printer");
 const express = require("express");
+const randomId = require("random-id");
 const app = express();
 const PORT = 3000;
+const LENGTH = 7;
+const pattern = "aA0";
 
 app.use(express.json());
 
 app.post("/print", (req, res) => {
+
+  let printOptions, options, jobID, logObject;
+
   const {
     printerID,
-    url,
+    path,
     fileName,
-    printSettings,
+    printSettings, //see params.txt
     printDescription,
   } = req.body;
-  
-  let printOptions = "-print-settings " + '"' + printSettings + '"';
 
-  // const options = {
-  //   printer: "Samsung M2020 Series (192.168.1.6)",
-  //   win32: ['-print-settings "landscape,fit"']
-  // };
-
-  const options = {
+  printOptions = "-print-settings " + '"' + printSettings + '"'; 
+  jobID = randomId(LENGTH, pattern);
+  options = {
     printer: printerID,
     win32: [printOptions],
   };
 
+  
+
   console.log(printDescription);
 
   printer
-    .print(url + fileName, options)
-    .then(res.send(`success, ${fileName} is being printed by ${printerID}`))
+    .print(path + fileName, options)
+    .then(res.send(`success, ${fileName} is being printed by ${printerID} with ID: ${jobID}`))
     .catch(res.send("Error, please see logs!"));
 });
 
