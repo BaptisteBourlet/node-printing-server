@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 
-app.use(express.json())
+app.use(express.json());
 
 app.post("/print", (req, res) => {
   const {
@@ -13,28 +13,25 @@ app.post("/print", (req, res) => {
     printSettings,
     printDescription,
   } = req.body;
+  
+  let printOptions = "-print-settings " + '"' + printSettings + '"';
 
   // const options = {
   //   printer: "Samsung M2020 Series (192.168.1.6)",
   //   win32: ['-print-settings "landscape,fit"']
   // };
 
-  let printsetters = '-print-settings ' + '"' + printSettings + '"';
-
   const options = {
     printer: printerID,
-    win32: [printsetters]
+    win32: [printOptions],
   };
 
   console.log(printDescription);
-  console.log('hehe')
 
   printer
     .print(url + fileName, options)
-    .then(console.log)
-    .catch(console.error);
-
-  res.send("ok");
+    .then(res.send(`success, ${fileName} is being printed by ${printerID}`))
+    .catch(res.send("Error, please see logs!"));
 });
 
 app.listen(PORT, () => {
