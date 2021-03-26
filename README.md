@@ -1,7 +1,7 @@
 # node-printing-server
 
 
-####PRE-EXQUISITES USED IN THIS APP
+####PREREQUISITES USED IN THIS APP
 
 -node v12.18.3 or any version
 
