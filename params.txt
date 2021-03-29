@@ -4,7 +4,7 @@ with params: {
     printerID: "",
     path: "",                //path to pdf file
     fileName: "",
-    printSettings: "",      // see below
+    printOptions: "",      // see below
     printDescription: "", 
 }
 
@@ -17,6 +17,6 @@ printSettings is a string that includes values of:
 - combobox of papersize: A2 to A6. example of rendered value: "paper=A4"
 
 
-example of valid printSettings: "landscape,monochrome,1-4,6,8,5x,paper=A4"
+example of valid printOptions: "landscape,monochrome,1-4,6,8,5x,paper=A4"
 
 thanks

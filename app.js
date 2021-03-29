@@ -1,6 +1,9 @@
 const printer = require("pdf-to-printer");
 const express = require("express");
 const randomId = require("random-id");
+const logger = require("./config/winston");
+const timeConverter = require('./config/timeConverter');
+const morgan = require("morgan");
 const cors = require("cors");
 const app = express();
 const PORT = 3000;
@@ -9,45 +12,57 @@ const pattern = "aA0";
 
 app.use(express.json());
 app.use(cors());
+app.use(morgan("combined", { stream: logger.stream }));
 
 app.post("/print", (req, res) => {
-  let printOptions, options, jobID, logObject;
+  let printSettings, options, jobID, logObject;
 
   const {
     printerID,
     path,
     fileName,
-    printSettings, //see params.txt
+    printOptions, //see params.txt
     printDescription,
   } = req.body;
 
-  printOptions = "-print-settings " + '"' + printSettings + '"';
+  printSettings = "-print-settings " + '"' + printOptions + '"';
   jobID = randomId(LENGTH, pattern);
   options = {
     printer: printerID,
-    win32: [printOptions],
+    win32: [printSettings],
   };
 
-  // console.log(printerID, path, fileName, printOptions, printDescription);
-
-  printer
-    .print(path + fileName, options)
-    .then(res.send(`success, ${fileName} is being printed by ${printerID} with ID: ${jobID}`))
-    .catch(console.error);
+  printer.getPrinters()
+  .then(response => {
+    if(response.includes(printerID)) {
+      printer
+      .print(path + fileName, options)
+      .then(response => {
+        logger.info(`${req.ip} - - ${timeConverter(Date.now())} - successful print request with ID: ${jobID} | fileName: ${fileName}`);
+        res.send(`success, ${fileName} is being printed by ${printerID} with ID: ${jobID}`)
+      })
+      .catch(err => {
+        logger.error(`${req.ip} - - ${timeConverter(Date.now())} - print request failed with ID: ${jobID} || see => ${err.cmd}`)
+        res.send(`print request failed with ID: ${jobID} - please see logs.`)
+      });
+    } else {
+      res.send("no printer matches, please use another one or try again!")
+      return;
+    }
+  })
+  .catch(err => {
+    console.log(err)
+  })
 });
 
 app.get("/test", (req, res) => {
   printer.getDefaultPrinter()
-  .then(console.log)
-  .catch(console.error);
-
-  printer.getPrinters()
-  .then(console.log)
-  .catch(console.error)
-
-
-  res.send("Working good, See the logs in console for printers' info.");
+  .then(response => {console.log(response)})
+  .catch(err => console.error(err));
+  
+  res.send("Working good, See the logs in console for printers");
 });
+
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
