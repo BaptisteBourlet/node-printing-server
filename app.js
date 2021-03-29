@@ -1,12 +1,14 @@
 const printer = require("pdf-to-printer");
 const express = require("express");
 const randomId = require("random-id");
+const cors = require('cors');
 const app = express();
 const PORT = 3000;
 const LENGTH = 7;
 const pattern = "aA0";
 
 app.use(express.json());
+app.use(cors());
 
 app.post("/print", (req, res) => {
 
@@ -37,6 +39,16 @@ app.post("/print", (req, res) => {
     .catch(res.send("Error, please see logs!"));
 });
 
+
+app.get('/test', (req, res) => {
+  res.send('testing');
+})
+
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
+
+
+
+
+
