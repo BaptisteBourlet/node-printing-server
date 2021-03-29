@@ -2,7 +2,7 @@ please send POST request to ":exampleDomain/print"
 
 with params: {
     printerID: "",
-    url: "",                //path to pdf file
+    path: "",                //path to pdf file
     fileName: "",
     printSettings: "",      // see below
     printDescription: "", 

@@ -28,20 +28,25 @@ app.post("/print", (req, res) => {
     win32: [printOptions],
   };
 
-  console.log(printerID, path, fileName, printOptions, printDescription);
+  // console.log(printerID, path, fileName, printOptions, printDescription);
 
   printer
     .print(path + fileName, options)
-    .then(
-      res.send(
-        `success, ${fileName} is being printed by ${printerID} with ID: ${jobID}`
-      )
-    )
-    .catch(res.send("Error, please see logs!"));
+    .then(res.send(`success, ${fileName} is being printed by ${printerID} with ID: ${jobID}`))
+    .catch(console.error);
 });
 
 app.get("/test", (req, res) => {
-  res.send("testing");
+  printer.getDefaultPrinter()
+  .then(console.log)
+  .catch(console.error);
+
+  printer.getPrinters()
+  .then(console.log)
+  .catch(console.error)
+
+
+  res.send("Working good, See the logs in console for printers' info.");
 });
 
 app.listen(PORT, () => {
