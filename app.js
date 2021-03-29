@@ -1,7 +1,7 @@
 const printer = require("pdf-to-printer");
 const express = require("express");
 const randomId = require("random-id");
-const cors = require('cors');
+const cors = require("cors");
 const app = express();
 const PORT = 3000;
 const LENGTH = 7;
@@ -11,7 +11,6 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/print", (req, res) => {
-
   let printOptions, options, jobID, logObject;
 
   const {
@@ -22,33 +21,29 @@ app.post("/print", (req, res) => {
     printDescription,
   } = req.body;
 
-  printOptions = "-print-settings " + '"' + printSettings + '"'; 
+  printOptions = "-print-settings " + '"' + printSettings + '"';
   jobID = randomId(LENGTH, pattern);
   options = {
     printer: printerID,
     win32: [printOptions],
   };
 
-  
-
-  console.log(printDescription);
+  console.log(printerID, path, fileName, printOptions, printDescription);
 
   printer
     .print(path + fileName, options)
-    .then(res.send(`success, ${fileName} is being printed by ${printerID} with ID: ${jobID}`))
+    .then(
+      res.send(
+        `success, ${fileName} is being printed by ${printerID} with ID: ${jobID}`
+      )
+    )
     .catch(res.send("Error, please see logs!"));
 });
 
-
-app.get('/test', (req, res) => {
-  res.send('testing');
-})
+app.get("/test", (req, res) => {
+  res.send("testing");
+});
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
-
-
-
-
-
