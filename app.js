@@ -34,14 +34,16 @@ app.post("/print", (req, res) => {
     printer: printerID,
     win32: [printSettings],
   };
+  
 
+  // first, download the file 
   download(path, fileName)
     .then((success) => {
       let file = "pdf/" + fileName;
       printer
         .getPrinters()
-        .then((allPrinters) => {
-          if (allPrinters.includes(printerID)) {
+        .then((allPrinters) => { 
+          if (allPrinters.includes(printerID)) { //check if printer is available on machine
             printer
               .print(file, options)
               .then((response) => {
