@@ -9,7 +9,7 @@ with params: {
 }
 
 =================================================================
-printSettings is a string that includes values of:
+printOptions is a string that includes values of:
 - radiofield of "landscape" or "portrait",
 - checkbox to select color option. on = "color", unchecked = "monochrome"
 - textfield of pages to print: EXAMPLE: "1-5,8,10"  will print pages: 1,2,3,4,5,8 and 10.
