@@ -8,15 +8,14 @@ with params: {
     printDescription: "", 
 }
 
-================================================
+=================================================================
 printSettings is a string that includes values of:
-- radiofield of landscape or portrait,
-- checkbox to select color option. on = "color", uncheck = "monochrome"
-- textfield of pages to print: example: "1-5,8,10"  will print pages: 1,2,3,4,5,8 and 10. (no spaces in string)
-- numberfield of how many copies - value = "number + x", example of rendered value: "3x"
-- combobox of papersize: A2 to A6. example of rendered value: "paper=A4"
+- radiofield of "landscape" or "portrait",
+- checkbox to select color option. on = "color", unchecked = "monochrome"
+- textfield of pages to print: EXAMPLE: "1-5,8,10"  will print pages: 1,2,3,4,5,8 and 10.
+- numberfield of how many copies - value = "number + x", EXAMPLE of rendered value: "3x"
+- combobox of papersize: A2 to A6. EXAMPLE of rendered value: "paper=A4"
 
-
-example of valid printOptions: "landscape,monochrome,1-4,6,8,5x,paper=A4"
+EXAMPLE of valid printOptions: "landscape,monochrome,1-4,6,8,5x,paper=A4"  (no spaces in string)
 
 thanks

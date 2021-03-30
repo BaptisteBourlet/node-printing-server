@@ -15,7 +15,7 @@ app.use(cors());
 app.use(morgan("combined", { stream: logger.stream }));
 
 app.post("/print", (req, res) => {
-  let printSettings, options, jobID, logObject;
+  let printSettings, options, jobID;
 
   const {
     printerID,
@@ -32,21 +32,22 @@ app.post("/print", (req, res) => {
     win32: [printSettings],
   };
 
+  // check if requested printer is available
   printer.getPrinters()
-  .then(response => {
-    if(response.includes(printerID)) {
+  .then(allPrinters => {
+    if(allPrinters.includes(printerID)) {
       printer
       .print(path + fileName, options)
       .then(response => {
         logger.info(`${req.ip} - - ${timeConverter(Date.now())} - successful print request with ID: ${jobID} | fileName: ${fileName}`);
         res.send(`success, ${fileName} is being printed by ${printerID} with ID: ${jobID}`)
       })
-      .catch(err => {
-        logger.error(`${req.ip} - - ${timeConverter(Date.now())} - print request failed with ID: ${jobID} || see => ${err.cmd}`)
+      .catch(error => {
+        logger.error(`${req.ip} - - ${timeConverter(Date.now())} - print request failed with ID: ${jobID} || see => ${error.cmd}`)
         res.send(`print request failed with ID: ${jobID} - please see logs.`)
       });
     } else {
-      res.send("no printer matches, please use another one or try again!")
+      res.send(`no printer matches ${printerID}, please use another one or try again!`)
       return;
     }
   })
@@ -57,12 +58,11 @@ app.post("/print", (req, res) => {
 
 app.get("/test", (req, res) => {
   printer.getDefaultPrinter()
-  .then(response => {console.log(response)})
-  .catch(err => console.error(err));
+  .then(defaultPrinter => {console.log(defaultPrinter)})
+  .catch(error => console.error(error));
   
   res.send("Working good, See the logs in console for printers");
 });
-
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
